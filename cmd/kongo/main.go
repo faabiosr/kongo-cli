@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/fabiorphp/kongo-cli/pkg/cli"
 	ufcli "github.com/urfave/cli"
 	"os"
 )
@@ -16,6 +17,9 @@ func main() {
 	app.Version = version
 	app.Copyright = "(c) 2018 - Fábio da Silva Ribeiro"
 	app.Usage = "Manage Kong instances by CLI"
+	app.Commands = []ufcli.Command{
+		cli.Version(),
+	}
 
-	app.Run(os.Args)
+	_ = app.Run(os.Args)
 }
