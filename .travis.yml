@@ -2,9 +2,9 @@ dist: trusty
 language: go
 go: "1.10"
 addons:
-  - apt:
-      packages:
-        - rpm
+  apt:
+    packages:
+      - rpm
 
 before_install:
   - go get github.com/axw/gocov/gocov
