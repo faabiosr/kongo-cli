@@ -25,6 +25,7 @@ cover: test
 	go tool cover -html=./build/cover.out -o ./build/cover.html
 .PHONY: cover
 
+# Download dependencies
 depend:
 	go get -u gopkg.in/alecthomas/gometalinter.v2
 	gometalinter.v2 --install
