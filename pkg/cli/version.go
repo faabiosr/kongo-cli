@@ -9,8 +9,7 @@ import (
 var (
 	versionTmpl = `Version: {{ .Version }}
 GO Version: {{ .GoVersion }}
-OS/Arch: {{ .Os }}/{{ .Arch }}
-`
+OS/Arch: {{ .Os }}/{{ .Arch }}`
 )
 
 type (

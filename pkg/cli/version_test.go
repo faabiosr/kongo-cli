@@ -1,30 +1,27 @@
 package cli
 
 import (
+	"bytes"
 	"flag"
-	"github.com/stretchr/testify/suite"
+	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli"
 	"testing"
 )
 
-type (
-	VersionTestSuite struct {
-		CommandTestSuite
-	}
-)
-
-func (s *VersionTestSuite) TestVersionCommand() {
+func TestVersionCommand(t *testing.T) {
+	buf := &bytes.Buffer{}
 	set := flag.NewFlagSet("", 0)
-	ctx := cli.NewContext(s.app, set, nil)
 
-	err := Version().Run(ctx)
+	app := cli.NewApp()
+	app.Writer = buf
 
-	s.assert.Nil(err)
-	s.assert.Contains(s.buf.String(), "Version")
-	s.assert.Contains(s.buf.String(), "GO Version")
-	s.assert.Contains(s.buf.String(), "OS/Arch")
-}
+	err := Version().Run(
+		cli.NewContext(app, set, nil),
+	)
 
-func TestVersionTestSuite(t *testing.T) {
-	suite.Run(t, new(VersionTestSuite))
+	assert.Nil(t, err)
+	assert.Contains(t, buf.String(), "Version")
+	assert.Contains(t, buf.String(), "GO Version")
+	assert.Contains(t, buf.String(), "OS/Arch")
+
 }

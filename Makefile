@@ -4,7 +4,7 @@ OS=$(shell uname -s)
 
 .DEFAULT_GOAL := build
 
-# Build a beta version of kongo
+# Build a beta version of kongo-cli
 build:
 	CGO_ENABLED=0 go build -v -a ${LDFLAGS} -o ./build/kongo github.com/fabiorphp/kongo-cli/cmd/kongo
 .PHONY: build
