@@ -8,6 +8,36 @@
   version = "v1.1.0"
 
 [[projects]]
+  name = "github.com/fabiorphp/kongo"
+  packages = ["."]
+  revision = "5f39de9885f9200581f30af2d677e52b9120e3d9"
+  version = "0.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/google/go-querystring"
+  packages = ["query"]
+  revision = "53e6ce116135b80d037921a7fdd5138cf32d7a8a"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/hashicorp/go-version"
+  packages = ["."]
+  revision = "23480c0665776210b5fbbac6eaaee40e3e6a96b7"
+
+[[projects]]
+  name = "github.com/liip/sheriff"
+  packages = ["."]
+  revision = "0ae0e1f38ffdeff014c9c7af0a1d3cc04f639b5e"
+  version = "0.3.0"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
   name = "github.com/pmezard/go-difflib"
   packages = ["difflib"]
   revision = "792786c7400a136282c1664665ae0a8db921c6c2"
@@ -32,6 +62,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "58f85ec5841ef1ce0fc65099a19aaf70bf7c62ae9fd20db2315cc52bfacc4c3f"
+  inputs-digest = "12fa8b67d098f249cc5b0e2f19f395ae5c3067bed97eeb7db9321b68f6adffdd"
   solver-name = "gps-cdcl"
   solver-version = 1
