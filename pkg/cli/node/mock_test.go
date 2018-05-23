@@ -15,7 +15,21 @@ type (
 )
 
 func (mock *MockNode) Info() (*api.NodeInfo, *http.Response, error) {
-	return nil, nil, nil
+	if mock.EmptyStatus {
+		return new(api.NodeInfo), nil, nil
+	}
+
+	if mock.Error {
+		return nil, nil, errors.New("Unable to connect")
+	}
+
+	info := &api.NodeInfo{
+		Configuration: &api.NodeInfoConfiguration{},
+		Plugins:       &api.NodeInfoPlugins{},
+		Timers:        &api.NodeInfoTimers{},
+	}
+
+	return info, nil, nil
 }
 func (mock *MockNode) InfoWithContext(ctx context.Context) (*api.NodeInfo, *http.Response, error) {
 	return nil, nil, nil

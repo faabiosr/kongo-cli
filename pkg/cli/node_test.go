@@ -6,5 +6,5 @@ import (
 )
 
 func TestNodeCommand(t *testing.T) {
-	assert.Len(t, Node().Subcommands, 1)
+	assert.Len(t, Node().Subcommands, 2)
 }

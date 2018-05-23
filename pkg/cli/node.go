@@ -16,6 +16,11 @@ func Node() cli.Command {
 				Usage:  "Retrieves usage information about a node",
 				Action: node.Status,
 			},
+			cli.Command{
+				Name:   "info",
+				Usage:  "Retrieves the information about the server node",
+				Action: node.Info,
+			},
 		},
 	}
 }
