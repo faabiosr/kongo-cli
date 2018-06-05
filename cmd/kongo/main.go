@@ -43,6 +43,7 @@ func main() {
 	app.Commands = []ufcli.Command{
 		cli.Version(),
 		cli.Node(),
+		cli.Services(),
 	}
 
 	err := app.Run(os.Args)
