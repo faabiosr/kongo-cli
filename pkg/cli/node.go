@@ -11,12 +11,12 @@ func Node() cli.Command {
 		Name:  "node",
 		Usage: "Retrieves details about a node",
 		Subcommands: []cli.Command{
-			cli.Command{
+			{
 				Name:   "status",
 				Usage:  "Retrieves usage information about a node",
 				Action: node.Status,
 			},
-			cli.Command{
+			{
 				Name:   "info",
 				Usage:  "Retrieves the information about the server node",
 				Action: node.Info,

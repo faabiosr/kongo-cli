@@ -11,7 +11,7 @@ func Services() cli.Command {
 		Name:  "services",
 		Usage: "Manages the Kong upstream services",
 		Subcommands: []cli.Command{
-			cli.Command{
+			{
 				Name:      "create",
 				Usage:     "Creates a new service",
 				ArgsUsage: "name",
