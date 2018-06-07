@@ -38,6 +38,10 @@ func (mock *MockServices) CreateByURLWithContext(ctx context.Context, svc *api.S
 }
 
 func (mock *MockServices) Delete(idOrName string) (*http.Response, error) {
+	if mock.Error {
+		return nil, errors.New("Unable to connect")
+	}
+
 	return nil, nil
 }
 

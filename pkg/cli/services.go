@@ -66,6 +66,12 @@ func Services() cli.Command {
 				Usage:  "Retrieves a list of registered services",
 				Action: services.List,
 			},
+			{
+				Name:      "rm",
+				Usage:     "Delete registered services by ID or Name",
+				ArgsUsage: "name [name...]",
+				Action:    services.Remove,
+			},
 		},
 	}
 }

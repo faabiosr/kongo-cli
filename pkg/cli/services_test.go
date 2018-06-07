@@ -6,5 +6,5 @@ import (
 )
 
 func TestServicesCommand(t *testing.T) {
-	assert.Len(t, Services().Subcommands, 2)
+	assert.Len(t, Services().Subcommands, 3)
 }
