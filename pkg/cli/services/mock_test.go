@@ -54,7 +54,15 @@ func (mock *MockServices) GetWithContext(ctx context.Context, idOrName string) (
 }
 
 func (mock *MockServices) List(options *api.ListServicesOptions) ([]*api.Service, *http.Response, error) {
-	return nil, nil, nil
+	if mock.Error {
+		return nil, nil, errors.New("Unable to connect")
+	}
+
+	service := &api.Service{
+		Id: "a1",
+	}
+
+	return []*api.Service{service}, nil, nil
 }
 
 func (mock *MockServices) ListWithContext(ctx context.Context, options *api.ListServicesOptions) ([]*api.Service, *http.Response, error) {

@@ -61,6 +61,11 @@ func Services() cli.Command {
 					},
 				},
 			},
+			{
+				Name:   "ls",
+				Usage:  "Retrieves a list of registered services",
+				Action: services.List,
+			},
 		},
 	}
 }
