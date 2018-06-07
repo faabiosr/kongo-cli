@@ -115,7 +115,8 @@ Tagline: {{ .Tagline }}
 Timers:
   Pending: {{ .Timers.Pending }}
   Running: {{ .Timers.Running }}
-Version: {{ .Version }}`
+Version: {{ .Version }}
+`
 
 	// ErrNodeInfo retrieves an error message when client api fails.
 	ErrNodeInfo = "Unable to retrieve the node information"
@@ -123,6 +124,12 @@ Version: {{ .Version }}`
 
 // Info retrieves the information about the server node.
 func Info(c *cli.Context) error {
+	tmpl, err := template.NewPlain(nodeInfoTmpl)
+
+	if err != nil {
+		return err
+	}
+
 	client := c.App.Metadata["client"].(*api.Kongo)
 	info, _, err := client.Node.Info()
 
@@ -130,7 +137,9 @@ func Info(c *cli.Context) error {
 		return errors.Wrap(err, ErrNodeInfo)
 	}
 
-	tmpl := template.NewPlain(nodeInfoTmpl)
+	if err := tmpl.Write(info); err != nil {
+		return err
+	}
 
-	return tmpl.Write(c.App.Writer, info)
+	return tmpl.Flush(c.App.Writer)
 }

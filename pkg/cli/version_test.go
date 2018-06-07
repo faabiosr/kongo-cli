@@ -23,5 +23,4 @@ func TestVersionCommand(t *testing.T) {
 	assert.Contains(t, buf.String(), "Version")
 	assert.Contains(t, buf.String(), "GO Version")
 	assert.Contains(t, buf.String(), "OS/Arch")
-
 }

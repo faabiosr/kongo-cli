@@ -9,7 +9,8 @@ import (
 var (
 	versionTmpl = `Version: {{ .Version }}
 GO Version: {{ .GoVersion }}
-OS/Arch: {{ .Os }}/{{ .Arch }}`
+OS/Arch: {{ .Os }}/{{ .Arch }}
+`
 )
 
 type (
@@ -35,7 +36,11 @@ func Version() cli.Command {
 		Name:  "version",
 		Usage: "Shows the Kongo version information",
 		Action: func(c *cli.Context) error {
-			tmpl := template.NewPlain(versionTmpl)
+			tmpl, err := template.NewPlain(versionTmpl)
+
+			if err != nil {
+				return err
+			}
 
 			info := VersionInfo{
 				Version:   c.App.Version,
@@ -44,7 +49,11 @@ func Version() cli.Command {
 				Arch:      runtime.GOARCH,
 			}
 
-			return tmpl.Write(c.App.Writer, info)
+			if err := tmpl.Write(info); err != nil {
+				return err
+			}
+
+			return tmpl.Flush(c.App.Writer)
 		},
 	}
 }

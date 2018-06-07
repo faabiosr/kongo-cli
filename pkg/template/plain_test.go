@@ -2,60 +2,70 @@ package template
 
 import (
 	"bytes"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
 )
 
 type (
 	PlainTestSuite struct {
-		suite.Suite
-
-		assert *assert.Assertions
+		TemplateTestSuite
 	}
 )
 
-func (s *PlainTestSuite) SetupTest() {
-	s.assert = assert.New(s.T())
+func (s *PlainTestSuite) TestFactoryRetrievesError() {
+	_, err := NewPlain(`{{define "foo"}} FOO `)
+
+	s.assert.Error(err)
+	s.assert.Contains(err.Error(), ErrTemplateWriting)
 }
 
-func (s *PlainTestSuite) TestWriteParsedData() {
-	b := &bytes.Buffer{}
+func (s *PlainTestSuite) TestFactory() {
+	tmpl, err := NewPlain(`{{ .Id }}\n`)
+
+	s.assert.Nil(err)
+	s.assert.Implements(new(Template), tmpl)
+}
+
+func (s *PlainTestSuite) TestWriteRetrievesError() {
+	tmpl, _ := NewPlain(`{{ .Id }}\n`)
+
+	data := struct {
+		Type string
+	}{}
+
+	err := tmpl.Write(data)
+
+	s.assert.Error(err)
+	s.assert.Contains(err.Error(), ErrTemplateWriting)
+}
+
+func (s *PlainTestSuite) TestFlushFailDuringWriteIntoOutput() {
+	tmpl, _ := NewPlain(`{{ .Type }}\n`)
+
+	data := struct {
+		Type string
+	}{"table"}
+
+	tmpl.Write(data)
+
+	err := tmpl.Flush(new(errorWriter))
+
+	s.assert.Error(err)
+	s.assert.Contains(err.Error(), ErrTemplateFlushing)
+}
+
+func (s *PlainTestSuite) TestFlush() {
+	tmpl, _ := NewPlain(`{{ .Type }}\n`)
 
 	data := struct {
 		Type string
 	}{"plain"}
 
-	err := NewPlain("{{ .Type }}").Write(b, data)
+	buf := new(bytes.Buffer)
 
-	s.assert.Contains(b.String(), "plain")
-	s.assert.Nil(err)
-}
-
-func (s *PlainTestSuite) TestWriteParsedWithInvalidData() {
-	b := &bytes.Buffer{}
-
-	data := struct {
-		Type string
-	}{}
-
-	err := NewPlain("{{ .Type.Test }}").Write(b, data)
-
-	s.assert.Error(err)
-	s.assert.Contains(err.Error(), ErrTemplateParsing)
-}
-
-func (s *PlainTestSuite) TestWriteParsedWithInvalidContent() {
-	b := &bytes.Buffer{}
-
-	data := struct {
-		Type string
-	}{}
-
-	err := NewPlain(`{{define "foo"}} FOO `).Write(b, data)
-	s.assert.Contains(err.Error(), ErrTemplateParsing)
-
-	s.assert.Error(err)
+	s.assert.Nil(tmpl.Write(data))
+	s.assert.Nil(tmpl.Flush(buf))
+	s.assert.Contains(buf.String(), "plain")
 }
 
 func TestPlainTestSuite(t *testing.T) {

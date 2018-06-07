@@ -9,16 +9,11 @@ import (
 
 type (
 	MockNode struct {
-		EmptyStatus bool
-		Error       bool
+		Error bool
 	}
 )
 
 func (mock *MockNode) Info() (*api.NodeInfo, *http.Response, error) {
-	if mock.EmptyStatus {
-		return new(api.NodeInfo), nil, nil
-	}
-
 	if mock.Error {
 		return nil, nil, errors.New("Unable to connect")
 	}
@@ -31,15 +26,12 @@ func (mock *MockNode) Info() (*api.NodeInfo, *http.Response, error) {
 
 	return info, nil, nil
 }
+
 func (mock *MockNode) InfoWithContext(ctx context.Context) (*api.NodeInfo, *http.Response, error) {
 	return nil, nil, nil
 }
 
 func (mock *MockNode) Status() (*api.NodeStatus, *http.Response, error) {
-	if mock.EmptyStatus {
-		return new(api.NodeStatus), nil, nil
-	}
-
 	if mock.Error {
 		return nil, nil, errors.New("Unable to connect")
 	}

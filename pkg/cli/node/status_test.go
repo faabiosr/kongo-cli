@@ -1,35 +1,16 @@
 package node
 
 import (
-	"bytes"
-	"flag"
 	api "github.com/fabiorphp/kongo"
-	"github.com/fabiorphp/kongo-cli/pkg/template"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/urfave/cli"
 	"testing"
 )
 
 type (
 	StatusTestSuite struct {
-		suite.Suite
-		assert *assert.Assertions
-		buf    *bytes.Buffer
-		ctx    *cli.Context
+		NodeTestSuite
 	}
 )
-
-func (s *StatusTestSuite) SetupTest() {
-	s.assert = assert.New(s.T())
-	s.buf = &bytes.Buffer{}
-
-	app := cli.NewApp()
-	app.Metadata = map[string]interface{}{}
-	app.Writer = s.buf
-
-	s.ctx = cli.NewContext(app, flag.NewFlagSet("", 0), nil)
-}
 
 func (s *StatusTestSuite) TestStatusWhenApiReturnsError() {
 	s.ctx.App.Metadata["client"] = &api.Kongo{Node: &MockNode{Error: true}}
@@ -58,15 +39,6 @@ func (s *StatusTestSuite) TestStatus() {
 	s.assert.Contains(res, "Reading")
 	s.assert.Contains(res, "Writing")
 	s.assert.Contains(res, "Waiting")
-}
-
-func (s *StatusTestSuite) TestNodeStatusCommandTemplateError() {
-	s.ctx.App.Metadata["client"] = &api.Kongo{Node: &MockNode{EmptyStatus: true}}
-
-	err := Status(s.ctx)
-
-	s.assert.Error(err)
-	s.assert.Contains(err.Error(), template.ErrTemplateParsing)
 }
 
 func TestStatusTestSuite(t *testing.T) {

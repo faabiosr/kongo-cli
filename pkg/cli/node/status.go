@@ -9,15 +9,16 @@ import (
 
 var (
 	nodeStatusTmpl = `Database:
-    Reachable: {{ .Database.Reachable }}
+  Reachable: {{ .Database.Reachable }}
 Server:
-    Total Requests: {{ .Server.TotalRequests }}
-    Connections Active: {{ .Server.ConnectionsActive }}
-    Connections Accepted: {{ .Server.ConnectionsAccepted }}
-    Connections Handled: {{ .Server.ConnectionsHandled }}
-    Connections Reading: {{ .Server.ConnectionsReading }}
-    Connections Writing: {{ .Server.ConnectionsWriting }}
-    Connections Waiting: {{ .Server.ConnectionsWaiting }}`
+  Total Requests: {{ .Server.TotalRequests }}
+  Connections Active: {{ .Server.ConnectionsActive }}
+  Connections Accepted: {{ .Server.ConnectionsAccepted }}
+  Connections Handled: {{ .Server.ConnectionsHandled }}
+  Connections Reading: {{ .Server.ConnectionsReading }}
+  Connections Writing: {{ .Server.ConnectionsWriting }}
+  Connections Waiting: {{ .Server.ConnectionsWaiting }}
+`
 
 	// ErrNodeStatus retrieves an error message when client api fails.
 	ErrNodeStatus = "Unable to retrieve the node status"
@@ -25,6 +26,12 @@ Server:
 
 // Status retrieves usage information about a node.
 func Status(c *cli.Context) error {
+	tmpl, err := template.NewPlain(nodeStatusTmpl)
+
+	if err != nil {
+		return nil
+	}
+
 	client := c.App.Metadata["client"].(*api.Kongo)
 	status, _, err := client.Node.Status()
 
@@ -32,9 +39,9 @@ func Status(c *cli.Context) error {
 		return errors.Wrap(err, ErrNodeStatus)
 	}
 
-	tmpl := template.NewPlain(nodeStatusTmpl)
+	if err := tmpl.Write(status); err != nil {
+		return err
+	}
 
-	err = tmpl.Write(c.App.Writer, status)
-
-	return err
+	return tmpl.Flush(c.App.Writer)
 }
