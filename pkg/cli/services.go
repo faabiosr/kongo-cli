@@ -72,6 +72,54 @@ func Services() cli.Command {
 				ArgsUsage: "name [name...]",
 				Action:    services.Remove,
 			},
+			{
+				Name:      "update",
+				Usage:     "Updates a service registred by ID or Name",
+				ArgsUsage: "name",
+				Action:    services.Update,
+				Flags: []cli.Flag{
+					cli.StringFlag{
+						Name:  "name",
+						Usage: `The service name`,
+					},
+					cli.StringFlag{
+						Name:  "protocol",
+						Usage: `The protocol used to communicate with the upstream. It can be one of "http" or "https"`,
+					},
+					cli.StringFlag{
+						Name:  "host",
+						Usage: "The host of the upstream server",
+					},
+					cli.IntFlag{
+						Name:  "port",
+						Usage: "The upstream server port",
+					},
+					cli.StringFlag{
+						Name:  "path",
+						Usage: "The path to be used in requests to the upstream server",
+					},
+					cli.IntFlag{
+						Name:  "retries",
+						Usage: "The number of retries to execute upon failure the proxy",
+					},
+					cli.Int64Flag{
+						Name:  "connect-timeout",
+						Usage: "The timeout in milliseconds for establishing a connection to the upstream server",
+					},
+					cli.IntFlag{
+						Name:  "write-timeout",
+						Usage: "The timeout in milliseconds between two successive write operations for transmitting a request to the upstream server",
+					},
+					cli.IntFlag{
+						Name:  "read-timeout",
+						Usage: "The timeout in milliseconds between two successive read operations for transmitting a request to the upstream server",
+					},
+					cli.StringFlag{
+						Name:  "url",
+						Usage: `Shorthand attribute to set "protocol", "host", "port", and "path" at once, this attribute is write-only`,
+					},
+				},
+			},
 		},
 	}
 }

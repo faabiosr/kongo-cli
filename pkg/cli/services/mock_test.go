@@ -9,7 +9,8 @@ import (
 
 type (
 	MockServices struct {
-		Error bool
+		Error    bool
+		GetError bool
 	}
 )
 
@@ -50,7 +51,15 @@ func (mock *MockServices) DeleteWithContext(ctx context.Context, idOrName string
 }
 
 func (mock *MockServices) Get(idOrName string) (*api.Service, *http.Response, error) {
-	return nil, nil, nil
+	if mock.GetError {
+		return nil, nil, errors.New("Unable to connect")
+	}
+
+	service := &api.Service{
+		Id: "a1",
+	}
+
+	return service, nil, nil
 }
 
 func (mock *MockServices) GetWithContext(ctx context.Context, idOrName string) (*api.Service, *http.Response, error) {
@@ -74,7 +83,15 @@ func (mock *MockServices) ListWithContext(ctx context.Context, options *api.List
 }
 
 func (mock *MockServices) Update(idOrName string, svc *api.Service) (*api.Service, *http.Response, error) {
-	return nil, nil, nil
+	if mock.Error {
+		return nil, nil, errors.New("Unable to connect")
+	}
+
+	service := &api.Service{
+		Id: "a1",
+	}
+
+	return service, nil, nil
 }
 
 func (mock *MockServices) UpdateWithContext(ctx context.Context, idOrName string, svc *api.Service) (*api.Service, *http.Response, error) {
@@ -82,7 +99,7 @@ func (mock *MockServices) UpdateWithContext(ctx context.Context, idOrName string
 }
 
 func (mock *MockServices) UpdateByURL(idOrName string, svc *api.Service) (*api.Service, *http.Response, error) {
-	return nil, nil, nil
+	return mock.Update(idOrName, svc)
 }
 
 func (mock *MockServices) UpdateByURLWithContext(ctx context.Context, idOrName string, svc *api.Service) (*api.Service, *http.Response, error) {
